@@ -39,6 +39,16 @@ public class Conta {
       return null;
    }
 
+   public Conta pesquisarContaPix(long pix){
+      for (Conta conta : listaConta) {
+         long validaPix = conta.getPix();
+         if (validaPix == pix){
+            return conta;
+         }
+      }
+      return null;
+   }
+
    public Conta pesquisarPix(long pix){
       for (Conta conta : listaConta) {
          long validaPix = conta.getPix();
@@ -83,6 +93,7 @@ public class Conta {
    public void realizarDeposito(Double valor){
       this.saldo += valor;
       System.out.println("O saldo da conta é: " + this.saldo);
+      System.out.println("");
    }
 
    public void realizarSaque(Double valor){
@@ -96,6 +107,7 @@ public class Conta {
 
    public void consutarSaldo(){
       System.out.println("Seu saldo é: " + this.saldo);
+      System.out.println("");
    }
 
    public void verificarSaque(Double valor){
@@ -109,12 +121,15 @@ public class Conta {
    public void realizarTransferencia(Conta contaRemetente, Conta contaDestinatario){
 
       if (avaliaSaque){
+
          double valorTransferencia =  contaRemetente.getTransferencia();
          double saldoDestinatario = contaDestinatario.getSaldo();
          double novoSaldo = saldoDestinatario + valorTransferencia;
          contaDestinatario.setSaldo(novoSaldo);
 
-         System.out.println("Foram transferidos " + valorTransferencia + " para a conta do titular com CPF " + contaDestinatario.cliente.getCpf());
+         contaRemetente.realizarSaque(valorTransferencia);
+
+         System.out.println("Transferência de R$:" + valorTransferencia + " para " + contaDestinatario.cliente.getNome() + " realizada com sucesso!");
          System.out.println("");
 
       }else{

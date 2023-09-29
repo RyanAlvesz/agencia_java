@@ -16,7 +16,7 @@ public class Menu {
         do {
 
         System.out.println("---------------------------------");
-        System.out.println("                Menu");
+        System.out.println("               Menu");
         System.out.println("---------------------------------");
         System.out.println("1- Cadastrar Cliente");
         System.out.println("2- Gerar Conta");
@@ -24,9 +24,9 @@ public class Menu {
         System.out.println("4- Realizar Depósito");
         System.out.println("5- Realizar Saque");
         System.out.println("6- Cadastrar Pix");
-        System.out.println("6- Consultar Pix");
-        System.out.println("7- Transferência");
-        System.out.println("8- Sair");
+        System.out.println("7- Consultar Pix");
+        System.out.println("8- Transferência");
+        System.out.println("9- Sair");
         System.out.println("---------------------------------");
 
         int opicaoCliente = scanner.nextInt();
@@ -43,7 +43,7 @@ public class Menu {
                     break;
 
                 case 2:
-                    System.out.println("Informe o CPF do cliente Titular: ");
+                    System.out.print("Informe o CPF do cliente Titular: ");
                     long cpfPesquisado = scanner.nextLong();
                     scanner.nextLine();
 
@@ -65,7 +65,7 @@ public class Menu {
                     break;
 
                 case 3:
-                    System.out.println("Informe o CPF do cliente Titular: ");
+                    System.out.print("Informe o CPF do cliente Titular: ");
                     long cpfConsulta = scanner.nextLong();
                     scanner.nextLine();
 
@@ -76,6 +76,7 @@ public class Menu {
                     if (contaConsulta != null){
                         double saldoConta = contaConsulta.getSaldo();
                         System.out.println("O valor disponível é: " + saldoConta);
+                        System.out.println("");
                     }else {
                         System.out.println("O usuário informado não possui uma conta");
                         System.out.println("");
@@ -84,7 +85,7 @@ public class Menu {
                     break;
 
                 case 4:
-                    System.out.println("Informe o CPF do cliente Titular: ");
+                    System.out.print("Informe o CPF do cliente Titular: ");
                     long cpfDeposito = scanner.nextLong();
                     scanner.nextLine();
 
@@ -93,7 +94,8 @@ public class Menu {
                     Conta contaDeposito = referenciaConta.pesquisarConta(cpfDeposito);
 
                     if (contaDeposito != null){
-                        System.out.println("Informe o valor para o depósito: ");
+                        System.out.print("Informe o valor para o depósito: ");
+                        System.out.println("");
                         double valorDeposito = scanner.nextDouble();
                         scanner.nextLine();
                         contaDeposito.realizarDeposito(valorDeposito);
@@ -105,7 +107,7 @@ public class Menu {
                     break;
 
                 case 5:
-                    System.out.println("Informe o CPF do cliente Titular: ");
+                    System.out.print("Informe o CPF do cliente Titular: ");
                     long cpfSaque = scanner.nextLong();
                     scanner.nextLine();
 
@@ -114,7 +116,7 @@ public class Menu {
                     Conta contaSaque = referenciaConta.pesquisarConta(cpfSaque);
 
                     if (contaSaque != null){
-                        System.out.println("Informe o valor para o saque: ");
+                        System.out.print("Informe o valor para o saque: ");
                         double valorSaque = scanner.nextDouble();
                         scanner.nextLine();
                         contaSaque.verificarSaque(valorSaque);
@@ -127,7 +129,7 @@ public class Menu {
                     break;
 
                 case 6:
-                    System.out.println("Informe o CPF do cliente Titular: ");
+                    System.out.print("Informe o CPF do cliente Titular: ");
                     long cpfPix = scanner.nextLong();
                     scanner.nextLine();
 
@@ -158,6 +160,7 @@ public class Menu {
                         }
 
                         System.out.println("Pix cadastrado com sucesso!");
+                        System.out.println("");
 
                     }else {
                         System.out.println("O usuário informado não possui uma conta");
@@ -167,19 +170,21 @@ public class Menu {
                     break;
 
                 case 7:
-                    System.out.println("Informe o CPF do cliente Titular: ");
+                    System.out.print("Informe o CPF do cliente Titular: ");
                     long cpfConsultaPix = scanner.nextLong();
                     scanner.nextLine();
 
                     System.out.println("");
 
-                    Conta contaConsultaPix = referenciaConta.pesquisarConta(cpfConsultaPix);
+                    Conta contaConsultaPix = referenciaConta.pesquisarConta(cpfConsultaPix);;
 
-                    if (contaConsultaPix != null){
+                    if (contaConsultaPix.getPix() != 0){
                         double pix = contaConsultaPix.getPix();
-                        System.out.println("O pix de " + contaConsultaPix.getCliente().getNome() + " é: " + pix);
+                        System.out.print("O pix de " + contaConsultaPix.getCliente().getNome() + " é: ");
+                        System.out.printf("%.0f %n", pix);
+                        System.out.println("");
                     }else {
-                        System.out.println("O usuário informado não possui uma conta");
+                        System.out.println("O usuário informado não possui um pix cadastrado");
                         System.out.println("");
                     }
 
@@ -196,41 +201,40 @@ public class Menu {
 
                     if (contaRemetente != null){
 
-                        System.out.print("Informe o CPF ou o Pix do dono da conta que deseja transferir: ");
+                        System.out.print("Informe o CPF ou o Pix da conta que deseja transferir: ");
                         long escolhaTransferencia = scanner.nextLong();
                         scanner.nextLine();
 
                         System.out.println("");
 
+                        Conta contaDestinario = null;
 
-                        if (escolhaTransferencia == contaRemetente.getPix() || escolhaTransferencia == contaRemetente.getCliente().getCpf()){
+                        if (referenciaConta.pesquisarConta(escolhaTransferencia) != null) {
 
-                            Conta contaDestinario = null;
+                            contaDestinario = referenciaConta.pesquisarConta(escolhaTransferencia);
 
-                            if (escolhaTransferencia == contaRemetente.getPix()){
-                                contaDestinario = referenciaConta.pesquisarPix(escolhaTransferencia);
-                            }else if(escolhaTransferencia == contaRemetente.getCliente().getCpf()){
-                                contaDestinario = referenciaConta.pesquisarConta(escolhaTransferencia);
-                            }
+                            System.out.print("Informe o valor para transferência: ");
+                            double valorTransferencia = scanner.nextDouble();
+                            scanner.nextLine();
+                            contaRemetente.setTransferencia(valorTransferencia);
+                            contaRemetente.verificarSaque(valorTransferencia);
+                            contaRemetente.realizarTransferencia(contaRemetente, contaDestinario);
 
-                            if (contaDestinario != null) {
+                        }else if (referenciaConta.pesquisarContaPix(escolhaTransferencia) != null) {
 
-                                System.out.print("Informe o valor para transferência: ");
-                                double valorTransferencia = scanner.nextDouble();
-                                scanner.nextLine();
-                                contaRemetente.setTransferencia(valorTransferencia);
-                                contaRemetente.verificarSaque(valorTransferencia);
-                                contaRemetente.realizarTransferencia(contaRemetente, contaDestinario);
+                            contaDestinario = referenciaConta.pesquisarContaPix(escolhaTransferencia);
 
-                            }else {
-                                System.out.println("O usuário informado não possui uma conta");
-                                System.out.println("");
-                            }
+                            System.out.print("Informe o valor para transferência: ");
+                            System.out.println("");
+                            double valorTransferencia = scanner.nextDouble();
+                            scanner.nextLine();
+                            contaRemetente.setTransferencia(valorTransferencia);
+                            contaRemetente.verificarSaque(valorTransferencia);
+                            contaRemetente.realizarTransferencia(contaRemetente, contaDestinario);
 
                         }else {
-
-                            System.out.println("Pix ou CPF inválidos");
-
+                            System.out.println("O usuário informado não possui uma conta");
+                            System.out.println("");
                         }
 
                     }else {
